@@ -15,23 +15,62 @@ export default function TaskBoard() {
     isFavorite: false,
   };
   const [tasks, setTasks] = useState([defaultTaskList]);
-  const [showAddMoadal, setShowAddMoadal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [taskToUpdate, setTaskToUpdate] = useState(null);
 
-  function handleAddTask(task) {
-    setTasks([...tasks, task]);
+  function handleAddEditClick(newTask, isAdd) {
+    event.preventDefault();
+    if (isAdd) {
+      setTasks([...tasks, newTask]);
+    } else {
+      setTasks(
+        tasks.map((task) => {
+          if (task.id === newTask.id) {
+            return newTask;
+          }
+          return task;
+        })
+      );
+    }
+    setShowAddModal(false);
+  }
+
+  function handleEditTask(task) {
+    setTaskToUpdate(task);
+    setShowAddModal(true);
+  }
+
+  function handleCloseClick() {
+    setShowAddModal(false);
+    setTaskToUpdate(null);
+  }
+
+  function handleDeleteTask(taskId) {
+    const taskToDelete = tasks.filter((task) => task.id !== taskId);
+    setTasks(taskToDelete);
   }
 
   return (
     <>
       <section className="mb-20" id="tasks">
-        {showAddMoadal && <AddTaskModal onSave={handleAddTask} />}
+        {showAddModal && (
+          <AddTaskModal
+            onSave={handleAddEditClick}
+            onCloseClick={handleCloseClick}
+            taskUpdate={taskToUpdate}
+          />
+        )}
         <div className="container">
           <div className="p-2 flex justify-end">
             <SearchTask />
           </div>
           <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
-            <TaskActions onAddClick={() => setShowAddMoadal(true)} />
-            <TaskList tasks={tasks} />
+            <TaskActions onAddClick={() => setShowAddModal(true)} />
+            <TaskList
+              tasks={tasks}
+              onEdit={handleEditTask}
+              onDelete={handleDeleteTask}
+            />
           </div>
         </div>
       </section>

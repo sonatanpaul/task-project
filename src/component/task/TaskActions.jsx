@@ -1,5 +1,5 @@
 // eslint-disable-next-line react/prop-types
-export default function TaskActions({ onAddClick }) {
+export default function TaskActions({ onAddClick, onAllDeleteTask }) {
   return (
     <>
       <div className="mb-14 items-center justify-between sm:flex">
@@ -11,7 +11,10 @@ export default function TaskActions({ onAddClick }) {
           >
             Add Task
           </button>
-          <button className="rounded-md bg-red-500 px-3.5 py-2.5 text-sm font-semibold">
+          <button
+            onClick={onAllDeleteTask}
+            className="rounded-md bg-red-500 px-3.5 py-2.5 text-sm font-semibold"
+          >
             Delete All
           </button>
         </div>
