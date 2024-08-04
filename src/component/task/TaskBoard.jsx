@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AddTaskModal from "./AddTaskModal";
+import NoTask from "./NoTask";
 import SearchTask from "./SearchTask";
 import TaskActions from "./TaskActions";
 import TaskList from "./TaskList";
@@ -12,7 +13,7 @@ export default function TaskBoard() {
       "Learn React such than can treat it like my slave and make it do whatever i want to do",
     tags: ["web", "react", "javascript"],
     priority: "High",
-    isFavorite: false,
+    isFavorite: true,
   };
   const [tasks, setTasks] = useState([defaultTaskList]);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -55,6 +56,20 @@ export default function TaskBoard() {
     setTasks([...tasks]);
   }
 
+  function handleFavClick(taskId) {
+    const taskIndex = tasks.findIndex((task) => task.id === taskId);
+    const newTasks = [...tasks];
+    newTasks[taskIndex].isFavorite = !newTasks[taskIndex].isFavorite;
+    setTasks(newTasks);
+  }
+
+  function handleSearch(searchTerm) {
+    const filteredTasks = tasks.filter((task) =>
+      task.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setTasks([...filteredTasks]);
+  }
+
   return (
     <>
       <section className="mb-20" id="tasks">
@@ -67,18 +82,23 @@ export default function TaskBoard() {
         )}
         <div className="container">
           <div className="p-2 flex justify-end">
-            <SearchTask />
+            <SearchTask onSearch={handleSearch} />
           </div>
           <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
             <TaskActions
               onAddClick={() => setShowAddModal(true)}
               onDeleteAllTask={handleDeleteAllTask}
             />
-            <TaskList
-              tasks={tasks}
-              onEdit={handleEditTask}
-              onDelete={handleDeleteTask}
-            />
+            {tasks.length > 0 ? (
+              <TaskList
+                tasks={tasks}
+                onEdit={handleEditTask}
+                onDelete={handleDeleteTask}
+                onFavClick={handleFavClick}
+              />
+            ) : (
+              <NoTask />
+            )}
           </div>
         </div>
       </section>
