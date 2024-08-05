@@ -1,5 +1,10 @@
 // eslint-disable-next-line react/prop-types
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function TaskActions({ onAddClick, onDeleteAllTask }) {
+  const notify = () => toast("Delete All Task Successful!");
+
   return (
     <>
       <div className="mb-14 items-center justify-between sm:flex">
@@ -11,12 +16,15 @@ export default function TaskActions({ onAddClick, onDeleteAllTask }) {
           >
             Add Task
           </button>
-          <button
-            onClick={onDeleteAllTask}
-            className="rounded-md bg-red-500 px-3.5 py-2.5 text-sm font-semibold"
-          >
-            Delete All
-          </button>
+          <div>
+            <button
+              onClick={onDeleteAllTask}
+              className="rounded-md bg-red-500 px-3.5 py-2.5 text-sm font-semibold"
+            >
+              Delete All
+            </button>
+            <ToastContainer />
+          </div>
         </div>
       </div>
     </>
